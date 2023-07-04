@@ -18,7 +18,7 @@ function Sidebar() {
   return (
     <div className='sidebar'>
         <div className='sidebar__top'>
-            <h3>Dissssboard</h3>
+            <h3>Hey Jess xx DISCORDDDD</h3>
             <ExpandMoreIcon />
         </div>
 
