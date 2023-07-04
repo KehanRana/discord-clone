@@ -13,7 +13,8 @@ function ChatHeader() {
     <div className='chatHeader'>
         <div className='chatHeader__left'>
             <h3>
-                <span className='chatHeader__hash'># </span>Test Channel Name
+                <span className='chatHeader__hash'>#</span>
+                Test Channel Name
             </h3>
         </div>
 
@@ -34,4 +35,4 @@ function ChatHeader() {
   )
 }
 
-export default ChatHeader
+export default ChatHeader;
