@@ -15,7 +15,7 @@
 .chatHeader__left {
     display: flex;
     align-items: center;
-    color: rgb(214, 117, 233);
+    color: white;
 }
 
 .chatHeader__right {
