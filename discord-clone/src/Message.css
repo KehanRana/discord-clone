@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     padding: 20px;
+    margin-bottom: 13px;
     color: white;
 }
 
@@ -13,4 +14,26 @@
     color: gray;
     margin-left: 20px;
     font-size: x-small;
+}
+
+.message__actions {
+    display: flex;
+    position: absolute;
+    margin-top: 10px;
+    color: white;
+}
+
+.message__actions .edit__button {
+    margin-right: 6px;
+    color: #90caf9;
+    border-width: 2px;
+}
+
+.message__actions .edit__button:hover {
+    color: white;
+    border-color:#90caf9;
+}
+
+.delete__button:hover {
+    color: white;
 }
