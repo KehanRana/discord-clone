@@ -10,8 +10,6 @@ import {
   Avatar,
   Collapse,
   List,
-  ListItem,
-  ListItemText,
 } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
 import HeadsetIcon from "@material-ui/icons/Headset";
