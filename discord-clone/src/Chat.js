@@ -21,13 +21,27 @@ function Chat() {
 
   useEffect(() => {
     if (channelId) {
-      db.collection("channels")
+
+      const storedMessages = localStorage.getItem("chatMessages");
+      if (storedMessages) {
+        setMessages(JSON.parse(storedMessages));
+      }
+
+      const unsubscribe = db
+        .collection("channels")
         .doc(channelId)
         .collection("messages")
         .orderBy("timestamp", "asc")
-        .onSnapshot((snapshot) =>
-          setMessages(snapshot.docs.map((doc) => doc.data()))
-        );
+        .onSnapshot((snapshot) => {
+          const newMessages = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setMessages(newMessages);
+          localStorage.setItem("chatMessages", JSON.stringify(newMessages));
+        });
+
+        return () => unsubscribe();
     }
   }, [channelId]);
 
@@ -43,6 +57,27 @@ function Chat() {
     setInput("");
   };
 
+  const handleDeleteMessage = (messageId) => {
+    setMessages((prevMessages) =>
+    prevMessages.filter((message) => message.id !== messageId));
+
+    db.collection("channels")
+      .doc(channelId)
+      .collection("messages")
+      .doc(messageId)
+      .delete()
+      .then(() => {
+        console.log("Message delete successfully frome Firebase.");
+        const updatedMessages = messages.filter(
+          (message) => message.id !== messageId
+        );
+        localStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
+      })
+      .catch((error) => {
+        console.error("Error deleting from firebase:", error);
+      })
+  }
+
   return (
     <div className="chat">
       <ChatHeader channelName={channelName} />
@@ -50,9 +85,12 @@ function Chat() {
       <div className="chat__messages">
         {messages.map((message) => (
           <Message 
+            key={message.id}
+            id={message.id}
             timestamp = {message.timestamp}
             message = {message.message}
             user = {message.user}
+            onDeleteMessage={handleDeleteMessage}
           />
         ))}
       </div>
