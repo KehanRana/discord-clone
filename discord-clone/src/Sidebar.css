@@ -38,8 +38,15 @@
   }
   
   .sidebar__header {
+    cursor: pointer;
+    padding: 10px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+  }
+
+  .sidebar__header:hover {
+    color: white;
   }
   
   .sidebar__voice,
