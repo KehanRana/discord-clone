@@ -17,12 +17,23 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import db, { auth } from "./firebase";
+import Popup from "./Popup";
 
 function Sidebar() {
   const user = useSelector(selectUser);
   const [channels, setChannels] = useState([]);
 
   const [isChannelsOpen, setIsChannelsOpen] = useState(true);
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
 
   useEffect(() => {
     db.collection("channels").onSnapshot((snapshot) =>
@@ -35,9 +46,7 @@ function Sidebar() {
     );
   }, []);
 
-  const handleAddChannel = () => {
-    const channelName = prompt("Enter a new channel name");
-
+  const handleAddChannel = (channelName) => {
     if (channelName) {
       db.collection("channels").add({
         channelName: channelName,
@@ -73,9 +82,11 @@ function Sidebar() {
             </div>
 
             <AddIcon
-              onClick={handleAddChannel}
+              onClick={handleOpenPopup}
               className="sidebar__addChannel"
-            />
+            /> {showPopup && (
+              <Popup onClose={handleClosePopup} onSubmit={handleAddChannel} promptText="Enter a channel name" />
+            )}
           </div>
 
           <Collapse in={isChannelsOpen}>
