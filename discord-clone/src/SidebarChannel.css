@@ -1,6 +1,11 @@
-.sidebarChannel:hover > h4 {
+  .sidebarChannel:hover > h4 {
     color: white;
-    background-color: #40464b;
+    background-color: rgb(180, 144, 238);
+  }
+
+  .sidebarChannel.active > h4 {
+    color: white;
+    background-color: rgb(180, 144, 238);
   }
   
   .sidebarChannel > h4 {

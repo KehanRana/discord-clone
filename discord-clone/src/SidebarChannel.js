@@ -1,22 +1,29 @@
 import React from "react";
 import "./SidebarChannel.css";
-import { useDispatch } from "react-redux";
-import { setChannelInfo } from "./features/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectChannelId, setChannelInfo } from "./features/appSlice";
 
 function SidebarChannel({ id, channelName }) {
   const dispatch = useDispatch();
+  const selectedChannelId = useSelector(selectChannelId);
+
+  const handleClick = () => {
+    dispatch(
+      setChannelInfo({
+        channelId: id,
+        channelName: channelName,
+      })
+    );
+  };
+
+  const isActive = selectedChannelId === id;
 
   return (
     <div
-      className="sidebarChannel"
-      onClick={() =>
-        dispatch(
-          setChannelInfo({
-            channelId: id,
-            channelName: channelName,
-          })
-        )
-      }
+      className={`sidebarChannel ${isActive ? "active" : ""}`}
+      onClick={handleClick}
+    
+      
     >
       <h4>
         <span className="sidebarChannel__hash">#</span>
