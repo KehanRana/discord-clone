@@ -12,11 +12,11 @@ import { selectChannelId, selectChannelName } from "./features/appSlice";
 import db from "./firebase";
 import firebase from "firebase/compat/app";
 import EmojiPicker from "emoji-picker-react";
-import Draggable from 'react-draggable';
+import Draggable from "react-draggable";
 
 function Chat() {
   const user = useSelector(selectUser);
-  
+
   const channelId = useSelector(selectChannelId);
   const channelName = useSelector(selectChannelName);
 
@@ -87,9 +87,16 @@ function Chat() {
 
   const handleOutsideClick = (e) => {
     const inputDiv = document.querySelector(".chat__input form");
-    const emojiIcon = document.querySelector(".chat__inputIcons .chat__emojiBtn");
+    const emojiIcon = document.querySelector(
+      ".chat__inputIcons .chat__emojiBtn"
+    );
 
-    if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target) && !inputDiv.contains(e.target) && !emojiIcon.contains(e.target)) {
+    if (
+      emojiPickerRef.current &&
+      !emojiPickerRef.current.contains(e.target) &&
+      !inputDiv.contains(e.target) &&
+      !emojiIcon.contains(e.target)
+    ) {
       setShowEmojiPicker(false);
     }
   };
@@ -124,12 +131,11 @@ function Chat() {
               onEmojiClick={(emojiData) => {
                 const emoji = emojiData.emoji;
                 setInput((prevInput) => prevInput + emoji);
-                
               }}
             />
           </div>
         </Draggable>
-        )}
+      )}
 
       <div className="chat__input">
         <AddCircleIcon fontSize="large" />
@@ -160,7 +166,6 @@ function Chat() {
           />
         </div>
       </div>
-
     </div>
   );
 }
