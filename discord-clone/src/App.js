@@ -7,7 +7,7 @@ import "./Chat.css";
 import { selectUser } from "./features/userSlice";
 import Login from "./Login";
 import { auth } from "./firebase";
-import { login, logout, selectRecentChannelId, selectRecentChannelName, setRecentChannelInfo } from "./features/userSlice";
+import { login, logout, selectRecentChannelId, selectRecentChannelName } from "./features/userSlice";
 import { setChannelInfo } from "./features/appSlice";
 
 function App() {    
