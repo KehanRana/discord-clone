@@ -22,7 +22,6 @@ function isOlderThanYesterday(date) {
   return date < yesterday;
 }
 
-
 function Message({ id, timestamp, user, message, onDeleteMessage }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -60,8 +59,8 @@ function Message({ id, timestamp, user, message, onDeleteMessage }) {
         console.log("Nessage Succesf");
       })
       .catch((error) => {
-        console.error("eerrror dele", error)
-      })
+        console.error("eerrror dele", error);
+      });
   };
 
   return (
@@ -82,14 +81,17 @@ function Message({ id, timestamp, user, message, onDeleteMessage }) {
 
         {isHovered && (
           <div className="message__actions">
-            <Button
-              variant="outlined"
-              className="edit__button"
-              color="primary"
-              size="small"
-            >
-              Edit
-            </Button>
+            {user.uid === auth.currentUser.uid && (
+              <Button
+                variant="outlined"
+                className="edit__button"
+                color="primary"
+                size="small"
+              >
+                Edit
+              </Button>
+            )}
+
             {user.uid === auth.currentUser.uid && (
               <Button
                 variant="outlined"
