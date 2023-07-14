@@ -52,3 +52,12 @@
 .chat__inputIcons > .MuiSvgIcon-root {
     padding: 5px;
 }
+
+.chat__emojiBtn {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.chat__emojiBtn:hover {
+    color: rgb(233, 215, 53);
+}
