@@ -61,3 +61,16 @@
 .chat__emojiBtn:hover {
     color: rgb(233, 215, 53);
 }
+
+.emoji-picker-container.pop-out {
+    position: absolute;
+    z-index: 9999;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    
+    left: 660px;
+    bottom: 120px;
+    /* Add other styles as needed */
+  }
