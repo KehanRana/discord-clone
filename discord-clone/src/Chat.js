@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Chat.css";
 import ChatHeader from "./ChatHeader";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -11,17 +11,23 @@ import { selectUser } from "./features/userSlice";
 import { selectChannelId, selectChannelName } from "./features/appSlice";
 import db from "./firebase";
 import firebase from "firebase/compat/app";
+import EmojiPicker from "emoji-picker-react";
+import Draggable from 'react-draggable';
 
 function Chat() {
   const user = useSelector(selectUser);
+  
   const channelId = useSelector(selectChannelId);
   const channelName = useSelector(selectChannelName);
+
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
 
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null);
+
   useEffect(() => {
     if (channelId) {
-
       const storedMessages = localStorage.getItem("chatMessages");
       if (storedMessages) {
         setMessages(JSON.parse(storedMessages));
@@ -41,14 +47,14 @@ function Chat() {
           localStorage.setItem("chatMessages", JSON.stringify(newMessages));
         });
 
-        return () => unsubscribe();
+      return () => unsubscribe();
     }
   }, [channelId]);
 
   const sendMessage = (e) => {
     e.preventDefault();
 
-    db.collection('channels').doc(channelId).collection('messages').add({
+    db.collection("channels").doc(channelId).collection("messages").add({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       message: input,
       user: user,
@@ -59,7 +65,8 @@ function Chat() {
 
   const handleDeleteMessage = (messageId) => {
     setMessages((prevMessages) =>
-    prevMessages.filter((message) => message.id !== messageId));
+      prevMessages.filter((message) => message.id !== messageId)
+    );
 
     db.collection("channels")
       .doc(channelId)
@@ -75,8 +82,24 @@ function Chat() {
       })
       .catch((error) => {
         console.error("Error deleting from firebase:", error);
-      })
-  }
+      });
+  };
+
+  const handleOutsideClick = (e) => {
+    const inputDiv = document.querySelector(".chat__input form");
+    const emojiIcon = document.querySelector(".chat__inputIcons .chat__emojiBtn");
+
+    if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target) && !inputDiv.contains(e.target) && !emojiIcon.contains(e.target)) {
+      setShowEmojiPicker(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   return (
     <div className="chat">
@@ -84,16 +107,29 @@ function Chat() {
 
       <div className="chat__messages">
         {messages.map((message) => (
-          <Message 
+          <Message
             key={message.id}
             id={message.id}
-            timestamp = {message.timestamp}
-            message = {message.message}
-            user = {message.user}
+            timestamp={message.timestamp}
+            message={message.message}
+            user={message.user}
             onDeleteMessage={handleDeleteMessage}
           />
         ))}
       </div>
+      {showEmojiPicker && (
+        <Draggable cancel=".chat__emojiBtn">
+          <div className="emoji-picker-container pop-out" ref={emojiPickerRef}>
+            <EmojiPicker
+              onEmojiClick={(emojiData) => {
+                const emoji = emojiData.emoji;
+                setInput((prevInput) => prevInput + emoji);
+                
+              }}
+            />
+          </div>
+        </Draggable>
+        )}
 
       <div className="chat__input">
         <AddCircleIcon fontSize="large" />
@@ -117,9 +153,14 @@ function Chat() {
         <div className="chat__inputIcons">
           <CardGiftcardIcon fontSize="large" />
           <GifIcon fontSize="large" />
-          <EmojiEmotionsIcon fontSize="large" />
+          <EmojiEmotionsIcon
+            className="chat__emojiBtn"
+            fontSize="large"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          />
         </div>
       </div>
+
     </div>
   );
 }
