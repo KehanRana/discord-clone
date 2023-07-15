@@ -1,6 +1,6 @@
 .message {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 20px;
     margin-bottom: 13px;
     color: white;
@@ -15,8 +15,19 @@
     margin-left: 20px;
     flex-grow: 1;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: pre-wrap;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    font-size: 18px;
+    line-height: 1.5;
 }
+
+.message__info h4 {
+    display: flex;
+    align-items: center;
+  }
 
 .message__timestamp {
     color: gray;

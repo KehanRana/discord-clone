@@ -71,7 +71,7 @@ function Message({
     <div className="message__container">
       <ContextMenuTrigger id={id} holdToDisplay={-1}>
         <div className="message" onContextMenu={handleContextMenu}>
-          <Avatar src={user.photo} />
+          <Avatar className="message__avatar" src={user.photo} />
 
           <div className="message__info">
             <h4>
