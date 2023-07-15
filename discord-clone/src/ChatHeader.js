@@ -19,15 +19,15 @@ function ChatHeader({ channelName }) {
     const user = useSelector(selectUser);
 
     const [isUserListOpen, setIsUserListOpen] = useState(true);
-    const [loggedInUser, setLoggedInUser] = useState(user);
+    const [loggedInUser/*,setLoggedInUser*/] = useState(user);
 
     const handleUsersToggle = () => {
         setIsUserListOpen(!isUserListOpen);
       };
 
-    const handleLogin = (user) => {
-        setLoggedInUser(user);
-    }
+    //const handleLogin = (user) => {
+        //setLoggedInUser(user);
+    //}
 
   return (
     <div className='chatHeader'>
@@ -60,7 +60,7 @@ function ChatHeader({ channelName }) {
                     <UserList users={[loggedInUser]}
                     />
                     ): (
-                        <Login onLogin={handleLogin} />
+                        <Login />
                     )}
                 </List>
             </Collapse>

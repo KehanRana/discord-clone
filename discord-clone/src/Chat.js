@@ -26,6 +26,8 @@ function Chat() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef(null);
 
+  const [activeContextMenuId, setActiveContextMenuId] = useState(null);
+
   useEffect(() => {
     if (channelId) {
       const storedMessages = localStorage.getItem("chatMessages");
@@ -113,16 +115,21 @@ function Chat() {
       <ChatHeader channelName={channelName} />
 
       <div className="chat__messages">
-        {messages.map((message) => (
-          <Message
-            key={message.id}
-            id={message.id}
-            timestamp={message.timestamp}
-            message={message.message}
-            user={message.user}
-            onDeleteMessage={handleDeleteMessage}
-          />
-        ))}
+        <div className="chat__messagesContainer">
+          {messages.map((message) => (
+            <Message
+              key={message.id}
+              id={message.id}
+              timestamp={message.timestamp}
+              message={message.message}
+              user={message.user}
+              onDeleteMessage={handleDeleteMessage}
+              activeContextMenuId={activeContextMenuId}
+              setActiveContextMenuId={setActiveContextMenuId}
+            />
+          ))}
+        </div>
+
       </div>
       {showEmojiPicker && (
         <Draggable cancel=".chat__emojiBtn">
