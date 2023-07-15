@@ -6,9 +6,9 @@ import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
 import GifIcon from "@material-ui/icons/Gif";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import Message from "./Message";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "./features/userSlice";
-import { selectChannelId, selectChannelName } from "./features/appSlice";
+import { selectChannelId, selectChannelName, setChannelInfo } from "./features/appSlice";
 import db from "./firebase";
 import firebase from "firebase/compat/app";
 import EmojiPicker from "emoji-picker-react";
@@ -16,6 +16,7 @@ import Draggable from "react-draggable";
 
 function Chat() {
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   const channelId = useSelector(selectChannelId);
   const channelName = useSelector(selectChannelName);
@@ -52,6 +53,26 @@ function Chat() {
       return () => unsubscribe();
     }
   }, [channelId]);
+
+  useEffect(() => {
+    // Store the most recent channel information in localStorage
+    if (channelId && channelName) {
+      localStorage.setItem(
+        "recentChannel",
+        JSON.stringify({ channelId, channelName })
+      );
+    }
+  }, [channelId, channelName]);
+
+  useEffect(() => {
+    // Retrieve the most recent channel information from localStorage
+    const recentChannel = localStorage.getItem("recentChannel");
+    if (recentChannel) {
+      const { channelId, channelName } = JSON.parse(recentChannel);
+      dispatch(setChannelInfo({ channelId, channelName }));
+    }
+  }, [dispatch]);
+
 
   const sendMessage = (e) => {
     e.preventDefault();
