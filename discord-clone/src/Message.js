@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./Message.css";
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import db, { auth } from "./firebase";
 
@@ -22,8 +22,8 @@ function isOlderThanYesterday(date) {
   return date < yesterday;
 }
 
-function Message({ id, timestamp, user, message, onDeleteMessage }) {
-  const [isHovered, setIsHovered] = useState(false);
+function Message({ id, timestamp, user, message, onDeleteMessage, activeContextMenuId, setActiveContextMenuId }) {
+  const contextMenuRef = useRef(null);
 
   let timeOptions = "";
 
@@ -42,13 +42,10 @@ function Message({ id, timestamp, user, message, onDeleteMessage }) {
     }
   }
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    setActiveContextMenuId(id);
+  }
 
   const handleDelete = () => {
     onDeleteMessage(id);
@@ -63,12 +60,21 @@ function Message({ id, timestamp, user, message, onDeleteMessage }) {
       });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
+        setActiveContextMenuId(null);
+      }
+    };
+  
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [contextMenuRef, setActiveContextMenuId]);
+
   return (
-    <div
-      className="message"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className="message" onContextMenu={handleContextMenu}>
       <Avatar src={user.photo} />
 
       <div className="message__info">
@@ -78,35 +84,17 @@ function Message({ id, timestamp, user, message, onDeleteMessage }) {
         </h4>
 
         <p>{message}</p>
-
-        {isHovered && (
-          <div className="message__actions">
-            {user.uid === auth.currentUser.uid && (
-              <Button
-                variant="outlined"
-                className="edit__button"
-                color="primary"
-                size="small"
-              >
-                Edit
-              </Button>
-            )}
-
-            {user.uid === auth.currentUser.uid && (
-              <Button
-                variant="outlined"
-                className="delete__button"
-                startIcon={<DeleteIcon />}
-                color="secondary"
-                size="small"
-                onClick={handleDelete}
-              >
-                Delete
-              </Button>
-            )}
-          </div>
-        )}
       </div>
+
+      {activeContextMenuId === id && (
+        <div className="message__contextMenu" ref={contextMenuRef}>
+          {user.uid === auth.currentUser.uid && (
+            <span className="message__contextMenuItem" onClick={handleDelete}>
+              <DeleteIcon className="message__deleteBtn"/>Delete
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

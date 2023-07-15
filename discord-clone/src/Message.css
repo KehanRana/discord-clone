@@ -8,6 +8,9 @@
 
 .message__info {
     margin-left: 20px;
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .message__timestamp {
@@ -16,24 +19,25 @@
     font-size: x-small;
 }
 
-.message__actions {
+.message__contextMenuItem {
+    background-color: black;
     display: flex;
     position: absolute;
-    margin-top: 10px;
-    color: white;
+    padding: 10px;
+    margin-left: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: -10px;
 }
 
-.message__actions .edit__button {
-    margin-right: 6px;
-    color: #90caf9;
-    border-width: 2px;
+.message__deleteBtn {
+    justify-content: center;
+    display: flex;
 }
 
-.message__actions .edit__button:hover {
-    color: white;
-    border-color:#90caf9;
+.message__contextMenuItem:hover {
+    color: red;
 }
 
-.delete__button:hover {
-    color: white;
-}
+
+
