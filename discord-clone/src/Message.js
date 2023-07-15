@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React from "react";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import "./Message.css";
 import { Avatar } from "@material-ui/core";
@@ -32,7 +32,6 @@ function Message({
   activeContextMenuId,
   setActiveContextMenuId,
 }) {
-  const contextMenuRef = useRef(null);
 
   let timeOptions = "";
 
