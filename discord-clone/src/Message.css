@@ -32,7 +32,7 @@
 .message__timestamp {
     color: gray;
     margin-left: 20px;
-    font-size: x-small;
+    font-size: 15px;
 }
 
 .message__contextMenu {
