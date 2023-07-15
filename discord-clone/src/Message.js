@@ -40,7 +40,11 @@ function Message({
     if (isOlderThanYesterday(timestampDate)) {
       timeOptions = timestampDate.toLocaleString();
     } else if (isYesterday(timestampDate)) {
-      timeOptions = "Yesterday";
+      timeOptions = "Yesterday " + timestampDate.toLocaleString(undefined, {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
     } else {
       timeOptions = timestampDate.toLocaleTimeString(undefined, {
         hour: "numeric",
