@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import "./Message.css";
 import { Avatar } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -22,7 +23,15 @@ function isOlderThanYesterday(date) {
   return date < yesterday;
 }
 
-function Message({ id, timestamp, user, message, onDeleteMessage, activeContextMenuId, setActiveContextMenuId }) {
+function Message({
+  id,
+  timestamp,
+  user,
+  message,
+  onDeleteMessage,
+  activeContextMenuId,
+  setActiveContextMenuId,
+}) {
   const contextMenuRef = useRef(null);
 
   let timeOptions = "";
@@ -44,8 +53,7 @@ function Message({ id, timestamp, user, message, onDeleteMessage, activeContextM
 
   const handleContextMenu = (e) => {
     e.preventDefault();
-    setActiveContextMenuId(id);
-  }
+  };
 
   const handleDelete = () => {
     onDeleteMessage(id);
@@ -53,49 +61,41 @@ function Message({ id, timestamp, user, message, onDeleteMessage, activeContextM
       .doc(id)
       .delete()
       .then(() => {
-        console.log("Nessage Succesf");
+        console.log("Message deleted successfully.");
       })
       .catch((error) => {
-        console.error("eerrror dele", error);
+        console.error("Error deleting message: ", error);
       });
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
-        setActiveContextMenuId(null);
-      }
-    };
-  
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [contextMenuRef, setActiveContextMenuId]);
-
   return (
-    <div className="message" onContextMenu={handleContextMenu}>
-      <Avatar src={user.photo} />
+    <div className="message__container">
+      <ContextMenuTrigger id={id} holdToDisplay={-1}>
+        <div className="message" onContextMenu={handleContextMenu}>
+          <Avatar src={user.photo} />
 
-      <div className="message__info">
-        <h4>
-          {user.displayName}
-          <span className="message__timestamp">{timeOptions}</span>
-        </h4>
+          <div className="message__info">
+            <h4>
+              {user.displayName}
+              <span className="message__timestamp">{timeOptions}</span>
+            </h4>
 
-        <p>{message}</p>
-      </div>
-
-      {activeContextMenuId === id && (
-        <div className="message__contextMenu" ref={contextMenuRef}>
-          {user.uid === auth.currentUser.uid && (
-            <span className="message__contextMenuItem" onClick={handleDelete}>
-              <DeleteIcon className="message__deleteBtn"/>Delete
-            </span>
-          )}
+            <p>{message}</p>
+          </div>
         </div>
-      )}
-    </div>
+      </ContextMenuTrigger>
+
+        {user.uid === auth.currentUser.uid && (
+          <ContextMenu id={id} className="message__contextMenu">
+            <MenuItem onClick={handleDelete}>
+              <div className="message__deleteContainer">
+                <DeleteIcon className="message__deleteBtn" />
+                <span>Delete</span>
+              </div>
+            </MenuItem>
+          </ContextMenu>
+        )}
+      </div>
   );
 }
 
