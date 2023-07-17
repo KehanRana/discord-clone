@@ -8,12 +8,31 @@
   
   .sidebar__top {
     display: flex;
-    justify-content: space-between;
+    justify-content:left;
     align-items: center;
     padding: 20px;
     background-color: #2f3135;
     color: rgb(180, 144, 238);
     border-bottom: 3px solid #26282c;
+  }
+
+  .sidebar__top h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap; /* Prevent line break */
+    padding-left: 20px;
+  }
+  
+  .sidebar__top img,
+  .sidebar__top h3 {
+    display: inline-block;
+    vertical-align:middle;
+  }
+
+  .sidebar__logo {
+    width: 30px;
+    
   }
   
   .sidebar__channels {
