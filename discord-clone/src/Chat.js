@@ -18,6 +18,7 @@ import firebase from "firebase/compat/app";
 import EmojiPicker from "emoji-picker-react";
 import Draggable from "react-draggable";
 import BeachAccess from "@material-ui/icons/BeachAccess";
+import ChatSidebar from "./ChatSidebar";
 
 
 function Chat() {
@@ -49,6 +50,10 @@ function Chat() {
   const [showBackgroundOptions, setShowBackgroundOptions] = useState(false);
 
   const [customBackground, setCustomBackground] = useState(localStorage.getItem("customBackground") || "");
+
+  const [isUserListOpen, setIsUserListOpen] = useState(false);
+
+  
 
   useEffect(() => {
     if (selectedBackground) {
@@ -192,9 +197,14 @@ function Chat() {
     opacity: 1,
   };
 
+  const handleUsersToggle = () => {
+    setIsUserListOpen(!isUserListOpen);
+  };
+
   return (
     <div className="chat" style={chatBackgroundStyle}>
-      <ChatHeader channelName={channelName} />
+      <ChatHeader channelName={channelName} isUserListOpen={isUserListOpen} handleUsersToggle={handleUsersToggle}/>
+      <ChatSidebar isOpen={isUserListOpen} isUserListOpen={isUserListOpen}/>
 
       <div className="chat__messages">
         <div className="chat__messagesContainer">

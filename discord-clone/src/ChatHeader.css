@@ -5,6 +5,7 @@
     color: gray;
     padding: 10px;
     border-bottom: 2px solid gray;
+    position: relative;
 }
 
 .chatHeader__hash {
@@ -21,14 +22,16 @@
 
 .chatHeader__right {
     display: flex;
+    position: absolute;
     align-items: center;
     flex: 0.5;
-    justify-content: space-between;
+    right: 0;
 }
 
 .chatHeader__right > .MuiSvgIcon-root {
     padding: 5px;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .chatHeader__right > .MuiSvgIcon-root:hover {

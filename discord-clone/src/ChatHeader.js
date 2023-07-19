@@ -6,24 +6,10 @@ import PeopleAltRoundedIcon from "@material-ui/icons/PeopleAltRounded";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 import SendRoundedIcon from "@material-ui/icons/SendRounded";
 import HelpRoundedIcon from "@material-ui/icons/HelpRounded";
-import UserList from './UserList';
-import { useSelector } from "react-redux";
-import {
-    Collapse,
-    List,
-  } from "@material-ui/core";
-import { selectUser } from "./features/userSlice";
-import Login from './Login';
 
-function ChatHeader({ channelName }) {
-    const user = useSelector(selectUser);
 
-    const [isUserListOpen, setIsUserListOpen] = useState(true);
-    const [loggedInUser/*,setLoggedInUser*/] = useState(user);
-
-    const handleUsersToggle = () => {
-        setIsUserListOpen(!isUserListOpen);
-      };
+function ChatHeader({ channelName, isUserListOpen, handleUsersToggle }) {
+    
 
     //const handleLogin = (user) => {
         //setLoggedInUser(user);
@@ -54,16 +40,7 @@ function ChatHeader({ channelName }) {
             <SendRoundedIcon />
             <HelpRoundedIcon />
         </div>
-        <Collapse in={isUserListOpen}>
-                <List component='div' className="chatHeader_usersList">
-                    {user ? (
-                    <UserList users={[loggedInUser]}
-                    />
-                    ): (
-                        <Login />
-                    )}
-                </List>
-            </Collapse>
+
     </div>
   )
 }
