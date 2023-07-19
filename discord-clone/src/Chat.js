@@ -8,13 +8,25 @@ import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import Message from "./Message";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "./features/userSlice";
-import { selectChannelId, selectChannelName, setChannelInfo } from "./features/appSlice";
+import {
+  selectChannelId,
+  selectChannelName,
+  setChannelInfo,
+} from "./features/appSlice";
 import db from "./firebase";
 import firebase from "firebase/compat/app";
 import EmojiPicker from "emoji-picker-react";
 import Draggable from "react-draggable";
+import BeachAccess from "@material-ui/icons/BeachAccess";
+
 
 function Chat() {
+  const [backgroundImages, setBackgroundImages] = useState([
+    "url('https://seeklogo.com/images/D/discord-black-logo-733DD6B9B0-seeklogo.com.png')",
+    "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0NDQ0NCAgICA0HBwcHCA8ICQcNFREWFhURExMYHSggGBolGxUTITEhMSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDg0NDysZFRkrKzctLSsrKy03LTcrNzctLSsrKy0tLSsrLSsrLSsrKy0tLSsrKysrKysrKysrKysrK//AABEIALcBEwMBIgACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAABAAIDBQYE/8QAFxABAQEBAAAAAAAAAAAAAAAAAAEREv/EABoBAQEBAQEBAQAAAAAAAAAAAAEAAgMEBQb/xAAYEQEBAQEBAAAAAAAAAAAAAAAAEQESAv/aAAwDAQACEQMRAD8A8Egn3H50oIaUkGUqlQzpVCAIrNNZrLWKs01mhrBWaazQ3jNZrVZqbxis1qs1NYKzTWU3irJoqaxkGihoUGhHAkhrpiSUDZSQKSST0YGp7nwitCGohaNZRC0VnSqFoBirNVotGtYKzTWay1grNNZobwVmms1NYKxWqym8DNarKawVmmiprBQayGhUqE1iQIaxAoOiLKSKCBei1M6de58OHVrOrRphTK1lQjRo1kw2i0aAYbWbUyGsw6zaqzRGsxVmms2hrBazVaA3grNNrKaxVk1mprFRSyGsFBCIoNCaCSDWJJBrNSSTRAST0C1la9r48OrWdWs6o1o1nVoMOgaLWVCtZ1aGorQNWgxWs2q1kNZirNptZoazBRVazaGsVZprKaxUKhNKs00VNYAQiKDRQUkKCiEmkUg2EsSTu9Ws6teqvlRrRrOrUo1o0aNZMa0aNGhQ2jVo0GLRaNGpqG0Wi0WimK1m06zQ1mK1mq0UNYqEKmkEKiqzVUimTQigaAQqQCkkikkG8IVSLttWs6teivmxrVrOjVVGtWs6tCjWi1nVoph0aNGimHVrOq0GLRoGom0UWihpUIIoFlNKiqhFBJFAgFUJIhUgJFJNQFINhEJOx1dMatdq8Eb1axq0VRvRrOrVVGtGjQKY1oFAMatAWpRWhaKjENQRVQSIBCaVBGIhHFgMZRxYjAGsAMCOLE1mBHCGoMWFIxAoKPp1azq10rxRrVrK0VRrVrKSjWrWdWpRrRrOpGG1aAUQkDEklWswLDhxVrPDGHGsWCt54ZwY3iwVvPLGLG8WKnljBjkwYqeWMGOTBgq5YxN4KjyzhwpGDFiQUSSJjegatLwwrWdKqOrQko0tZJR1BJQpYkcxFYYq3nlYiRXTPLOHGkK3nlnDhxYq3nkJrFgrWeWMWN4sVPLGDG8WCnlx4sbsGKjljFjeDFVyxixsKrlnFjWLCoziawCqOPUyTXgh1aNWqqEs6TUdWjSVCYCqcwmAwV0zyTERW8xYjDgrpmCQkxVvPIw4TjNdM8s4saxKtZ5ZxY3gwVrlnBjeDEuWLBjeBURkY3gsNEYxY1YMQjOJqhCBFJR8ySL5qSSRQJRMZhRzGoRCq3mGNRmNRV0zDIQYG8wtQQh0zDCo1A6ZgxpQwOmYsWFYm88jFThwNcsixqwWEcs4zY2kNxx2BuwUs7jCITMGLCkIziKSj40k0+WUkgkkUYYkm8LRQbwxqBBvC1Ek3jUMSDrjUMSTpjUJQdcUhxIN4cWBBpWCpFaLGakmQLEizorNKLGspJMpJJP/2Q==')",
+    "url('https://static.vecteezy.com/system/resources/previews/003/559/330/original/abstract-background-with-gradient-blue-bubble-free-vector.jpg')",
+  ]);
+
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
@@ -28,6 +40,30 @@ function Chat() {
   const emojiPickerRef = useRef(null);
 
   const [activeContextMenuId, setActiveContextMenuId] = useState(null);
+
+  const messagesEndRef = useRef(null);
+
+  const [selectedBackground, setSelectedBackground] = useState(
+    localStorage.getItem("selectedBackground") || backgroundImages[0]
+  );
+  const [showBackgroundOptions, setShowBackgroundOptions] = useState(false);
+
+  const [customBackground, setCustomBackground] = useState(localStorage.getItem("customBackground") || "");
+
+  useEffect(() => {
+    if (selectedBackground) {
+      document.body.style.backgroundImage = selectedBackground;
+    }
+  }, [selectedBackground]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedBackground", selectedBackground);
+  }, [selectedBackground]);
+
+  useEffect(() => {
+    localStorage.setItem("customBackground", customBackground);
+  }, [customBackground]);
+
 
   useEffect(() => {
     if (channelId) {
@@ -72,7 +108,6 @@ function Chat() {
       dispatch(setChannelInfo({ channelId, channelName }));
     }
   }, [dispatch]);
-
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -131,8 +166,34 @@ function Chat() {
     };
   }, []);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behaviour: "smooth" });
+  }, [messages]);
+
+  const handleBackgroundSelect = (image) => {
+    if (image === "custom") {
+      const url = prompt("Enter the URL of the custom background image:");
+      if (url) {
+        if (backgroundImages.indexOf(`url('${url}')`) === -1) {
+          setBackgroundImages((prevImages) => [...prevImages, `url('${url}')`]);
+        }
+        setSelectedBackground(`url('${url}')`);
+      } else {
+        alert("Invalid URL or the image already exists in the options.");
+      }
+    } else {
+      setSelectedBackground(image);
+    }
+    setShowBackgroundOptions(false);
+  };
+
+  const chatBackgroundStyle = {
+    backgroundImage: customBackground ? `url(${customBackground})` : selectedBackground,
+    opacity: 1,
+  };
+
   return (
-    <div className="chat">
+    <div className="chat" style={chatBackgroundStyle}>
       <ChatHeader channelName={channelName} />
 
       <div className="chat__messages">
@@ -149,8 +210,8 @@ function Chat() {
               setActiveContextMenuId={setActiveContextMenuId}
             />
           ))}
+          <div ref={messagesEndRef} />
         </div>
-
       </div>
       {showEmojiPicker && (
         <Draggable cancel=".chat__emojiBtn">
@@ -185,7 +246,12 @@ function Chat() {
         </form>
 
         <div className="chat__inputIcons">
-          <CardGiftcardIcon fontSize="large" />
+          <BeachAccess
+            fontSize="large"
+            className="chat__backgroundToggle"
+            onClick={() => setShowBackgroundOptions(!showBackgroundOptions)}
+          />
+
           <GifIcon fontSize="large" />
           <EmojiEmotionsIcon
             className="chat__emojiBtn"
@@ -194,6 +260,24 @@ function Chat() {
           />
         </div>
       </div>
+      {showBackgroundOptions && (
+        <div className="chat__backgroundOptions">
+          <h1 className="chat__themeTitle">Select Theme</h1>
+          <div className="chat__backgroundOptionsGrid">
+            {Array.from(new Set(backgroundImages)).slice(0, 12).map((image, index) => (
+              <div key={index}
+                className="chat__backgroundOption"
+                style={{ backgroundImage: image }}
+                onClick={() => handleBackgroundSelect(image)}>
+              </div>
+            ))}
+            <div className="chat__backgroundOption"
+            style={{ backgroundImage: "url('https://via.placeholder.com/50')" }}
+            onClick={() => handleBackgroundSelect("custom")}>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
