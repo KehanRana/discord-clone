@@ -4,7 +4,7 @@ function UserList({ users }) {
   return (
     <div className='userList'>
         <h2>
-            UserList
+            Active Users
         </h2>
         <ul>
             {users && users.map((user) => (
