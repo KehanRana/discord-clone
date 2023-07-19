@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './ChatHeader.css';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import EditLocationRoundedIcon from "@material-ui/icons/EditLocationRounded";

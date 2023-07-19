@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Chat.css";
 import ChatHeader from "./ChatHeader";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
 import GifIcon from "@material-ui/icons/Gif";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import Message from "./Message";
@@ -49,7 +48,7 @@ function Chat() {
   );
   const [showBackgroundOptions, setShowBackgroundOptions] = useState(false);
 
-  const [customBackground, setCustomBackground] = useState(localStorage.getItem("customBackground") || "");
+  const [customBackground] = useState(localStorage.getItem("customBackground") || "");
 
   const [isUserListOpen, setIsUserListOpen] = useState(false);
 
