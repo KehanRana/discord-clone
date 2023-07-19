@@ -1,0 +1,43 @@
+/* ChatSidebar.css */
+.chatSidebar {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 0;
+    height: 100%;
+    background-color: gray;
+    transition: width 0.3s ease;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    color: white;
+  }
+
+  .chatSidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+.userList > h2 {
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    padding: 10px;
+    color: rgb(180, 144, 238);
+    background-color: rgb(228, 224, 224);
+}
+
+.userList > ul {
+    padding: 10px;
+    margin-left: 20px;
+    font-size: large;
+    white-space: nowrap;
+    
+}
+  
+  .chatSidebar.open {
+    width: 200px;
+    color: white;
+  }
+  
