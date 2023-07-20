@@ -21,11 +21,13 @@ import Popup from "./Popup";
 
 function Sidebar() {
   const user = useSelector(selectUser);
-  const [channels, setChannels] = useState([]);
 
+  const [channels, setChannels] = useState([]);
   const [isChannelsOpen, setIsChannelsOpen] = useState(true);
 
   const [showPopup, setShowPopup] = useState(false);
+
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -58,12 +60,19 @@ function Sidebar() {
     setIsChannelsOpen(!isChannelsOpen);
   };
 
+  const handleSidebarToggle = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  }
+
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
       <div className="sidebar__top">
-        
         <img className="sidebar__logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord Logo"/>
         <h3>My Server</h3>
+        <ExpandMoreIcon
+            className="sidebar__toggleIcon"
+            onClick={handleSidebarToggle}
+          />
       </div>
 
 

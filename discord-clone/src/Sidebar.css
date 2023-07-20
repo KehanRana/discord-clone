@@ -4,7 +4,37 @@
     flex: 0.25;
     height: 100vh;
     background-color: #2f3135;
+    transition: flex 0.1s ease;
+    max-width: 400px;
   }
+
+.sidebar.collapsed {
+  flex: 0;
+  width: 210px;
+}
+
+.sidebar__toggleIcon {
+  font-size: 20px;
+  color: gray;
+  transition: transform 0.3s ease;
+  transform: rotate(90deg);
+  right: 0;
+  border: 1px solid gray;
+  border-radius: 5px;
+  align-items: center;
+  position: relative;
+  margin-left: auto;
+  padding: auto;
+}
+
+.sidebar__toggleIcon:hover {
+  color: white;
+}
+
+.sidebar.collapsed .sidebar__toggleIcon {
+  transform: rotate(-90deg);
+
+}
   
   .sidebar__top {
     display: flex;
@@ -22,6 +52,7 @@
     margin: 0;
     white-space: nowrap; /* Prevent line break */
     padding-left: 20px;
+    margin-right: 6px;
   }
   
   .sidebar__top img,
