@@ -63,10 +63,29 @@ function Chat() {
   }, [selectedBackground]);
 
   useEffect(() => {
-    const userId = user?.uid; // Assuming the user has a unique ID, replace "uid" with the actual ID property of your user object.
-    const customBackgrounds = JSON.parse(localStorage.getItem(`userBackgrounds-${userId}`)) || [];
-    // If the user has custom backgrounds, you can set them in the state here.
-  }, [user]);
+    if (!user) return;
+    const userId = user?.uid;
+    const userRef = db.collection("users").doc(userId);
+
+    userRef.get().then((doc) => {
+      if (doc.exists) {
+        const customBackgroundUrl = doc.data().customBackground;
+        if (customBackgroundUrl) {
+          // If the user has a custom background, set it in the state
+          setSelectedBackground(`url('${customBackgroundUrl}')`);
+        } else {
+          // If the user does not have a custom background, use the default selected background
+          setSelectedBackground(
+            localStorage.getItem("selectedBackground") || backgroundImages[0]
+          );
+        }
+      } else {
+        setSelectedBackground(
+          localStorage.getItem("selectedBackground") || backgroundImages[0]
+        );
+      }
+    });
+}, [user, backgroundImages]);
 
 
   useEffect(() => {
@@ -174,26 +193,23 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
 
-  const handleBackgroundSelect = (image) => {
+  const handleBackgroundSelect = async (image) => {
     if (image === "custom") {
       const url = prompt("Enter the URL of the custom background image:");
       if (url) {
-        const userId = user?.uid;
-        const customBackgrounds = JSON.parse(localStorage.getItem(`userBackgrounds-${userId}`)) || [];
-        
-        if (customBackgrounds.indexOf(url) === -1) {
-          customBackgrounds.push(url);
-          localStorage.setItem(`userBackgrounds-${userId}`, JSON.stringify(customBackgrounds));
-          setBackgroundImages((prevImages) => [...prevImages, `url('${url}')`]);
-        } else {
-          alert("The image already exists in the options.")
+        try {
+          const userId = user?.uid;
+          const userRef = db.collection("users").doc(userId);
+          await userRef.update({
+            customBackground: url,
+          });
+          setSelectedBackground(`url(${url})`);
+        } catch (error) {
+          console.error("Error saving custom background:", error);
         }
-        setSelectedBackground(`url('${url}')`);
-      } else {
-        alert("Invalid URL or the image already exists in the options.");
-      }
+      } 
     } else {
-      setSelectedBackground(image);
+        setSelectedBackground(image);
     }
     setShowBackgroundOptions(false);
   };

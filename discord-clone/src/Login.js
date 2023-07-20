@@ -1,12 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./Login.css";
 import { Button } from "@material-ui/core";
-import { auth, provider } from "./firebase";
+import db, { auth, provider } from "./firebase";
+import UserList from './UserList';
+import { selectUser } from './features/userSlice';
 
 function Login() {
     const signIn = () => {
         //do clever stuff with loginnn
-        auth.signInWithPopup(provider).catch((error) => alert(error.message));
+        auth.signInWithPopup(provider)
+            .then((result) => {
+                const user = result.user;
+                createUserInFireStore(user);
+            })
+            .catch((error) => alert(error.message));
+    };
+
+    const createUserInFireStore = async (user) => {
+        try {
+            const userRef = db.collection("users").doc(user.uid);
+            const doc = await userRef.get();
+
+            if (!doc.exists) {
+                await userRef.set({
+                    displayName: user.displayName,
+                    email: user.email,
+                    photo: user.photoURL,
+                });
+                console.log("User document created successfully.");
+                
+            } else {
+                console.log("User document already exists.");
+                console.log("PFP", user.photoURL);
+            }
+        } catch (error) {
+            console.error("Error creating user document: ", error);
+        }
     };
 
   return (
@@ -20,7 +49,7 @@ function Login() {
             Sign in
         </Button>
     </div>
-  )
+  );
 }
 
 export default Login
