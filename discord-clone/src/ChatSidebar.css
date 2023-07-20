@@ -4,7 +4,7 @@
     justify-content: space-between;
     flex-direction: column;
     width: 0;
-    height: 100%;
+    height: 1160px;
     background-color: gray;
     transition: width 0.3s ease;
     overflow-y: auto;
@@ -13,10 +13,13 @@
     top: 0;
     z-index: 1;
     color: white;
+    margin-top: 60px;
   }
 
   .chatSidebar::-webkit-scrollbar {
     display: none;
+    width: 0;
+    overflow: hidden;
   }
 
 .userList > h2 {
@@ -24,20 +27,32 @@
     text-align: center;
     white-space: nowrap;
     padding: 10px;
-    color: rgb(180, 144, 238);
-    background-color: rgb(228, 224, 224);
+    color: #7289da;
+    background-color: #282b30;
+    margin-top: -5px;
 }
 
-.userList > ul {
-    padding: 10px;
-    margin-left: 20px;
-    font-size: large;
-    white-space: nowrap;
-    
+.userList__user {
+  align-items: center;
+  padding: 10px;
+  display: flex;
+  list-style: none;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.userList__user:hover {
+  background-color: #7289da;
+}
+
+.userList__photo {
+  margin-right: 10px;
 }
   
   .chatSidebar.open {
-    width: 200px;
+    width: 300px;
     color: white;
+    margin-top: 60px;
+    height: 1160px;
+    overflow: hidden;
   }
-  
