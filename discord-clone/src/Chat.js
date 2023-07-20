@@ -52,8 +52,6 @@ function Chat() {
 
   const [isUserListOpen, setIsUserListOpen] = useState(false);
 
-  
-
   useEffect(() => {
     if (selectedBackground) {
       document.body.style.backgroundImage = selectedBackground;
