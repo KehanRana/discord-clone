@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import "./Login.css";
 import { Button } from "@material-ui/core";
 import db, { auth, provider } from "./firebase";
-import UserList from './UserList';
-import { selectUser } from './features/userSlice';
 
 function Login() {
     const signIn = () => {
