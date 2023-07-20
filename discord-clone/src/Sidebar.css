@@ -29,6 +29,7 @@
 
 .sidebar__toggleIcon:hover {
   color: white;
+  cursor: pointer;
 }
 
 .sidebar.collapsed .sidebar__toggleIcon {
