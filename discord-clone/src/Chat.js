@@ -65,8 +65,10 @@ function Chat() {
   }, [selectedBackground]);
 
   useEffect(() => {
-    localStorage.setItem("customBackground", customBackground);
-  }, [customBackground]);
+    const userId = user?.uid; // Assuming the user has a unique ID, replace "uid" with the actual ID property of your user object.
+    const customBackgrounds = JSON.parse(localStorage.getItem(`userBackgrounds-${userId}`)) || [];
+    // If the user has custom backgrounds, you can set them in the state here.
+  }, [user]);
 
 
   useEffect(() => {
@@ -178,8 +180,15 @@ function Chat() {
     if (image === "custom") {
       const url = prompt("Enter the URL of the custom background image:");
       if (url) {
-        if (backgroundImages.indexOf(`url('${url}')`) === -1) {
+        const userId = user?.uid;
+        const customBackgrounds = JSON.parse(localStorage.getItem(`userBackgrounds-${userId}`)) || [];
+        
+        if (customBackgrounds.indexOf(url) === -1) {
+          customBackgrounds.push(url);
+          localStorage.setItem(`userBackgrounds-${userId}`, JSON.stringify(customBackgrounds));
           setBackgroundImages((prevImages) => [...prevImages, `url('${url}')`]);
+        } else {
+          alert("The image already exists in the options.")
         }
         setSelectedBackground(`url('${url}')`);
       } else {
